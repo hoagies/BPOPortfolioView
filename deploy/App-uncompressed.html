@@ -169,26 +169,31 @@
 				xtype: 'rallygrid',
 				store: summaryStore,
 				columnCfgs: [
-					{ header: 'FormattedID', dataIndex: 'FormattedID'},
-					{ header: 'Name', dataIndex: 'Name',    flex: 1 },
-					{ header: 'State', dataIndex: 'State',
+					{ header: 'FormattedID', dataIndex: 'FormattedID', flex: 1},
+					{ header: 'Name', dataIndex: 'Name',    flex: 10 },
+					{
+						header: 'State', dataIndex: 'State', flex: 1,
 						renderer: function(value, meta, record) {
 							if(!value) { return ''; }
 							return value.Name;
-						},
-						doSort: function(state) {
+						}
+						// doSort: function(state) {
 
-						}
+						// }
 					},
-					{ header: 'Owner',    dataIndex: 'Owner',
-						renderer: function(value, meta, record) {
-							return value._refObjectName;
-						}
-					},
-					{ header: '% done (points)',
+					{
+						header: '% done (points)',
+						flex: 2,
 						dataIndex: 'PercentDoneByStoryPlanEstimate',
 						xtype: 'templatecolumn',
 						tpl: Ext.create('Rally.ui.renderer.template.progressbar.PercentDoneByStoryPlanEstimateTemplate')
+					},
+					{
+						header: 'Owner',
+						dataIndex: 'Owner', flex: 1,
+						renderer: function(value, meta, record) {
+							return value._refObjectName;
+						}
 					}
 				],
 				// context: this.getContext(),
