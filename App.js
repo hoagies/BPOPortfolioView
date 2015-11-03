@@ -1,6 +1,6 @@
 Ext.define('CustomApp', {
     extend: 'Rally.app.App',
-	requires:['Rally.ui.grid.plugin.PercentDonePopoverPlugin'],
+	requires:['Rally.ui.renderer.template.FormattedIDTemplate','Rally.ui.grid.plugin.PercentDonePopoverPlugin'],
     componentCls: 'app',
 	title: 'BPO Portfolio View',
 	launch: function() {
@@ -123,26 +123,28 @@ Ext.define('CustomApp', {
 	
 	_onFeaturesLoaded: function(store_features,data){
 		that = this;
-		that._testResultList = [];
+		that._featureList = [];
 		var themeStore = Ext.StoreMgr.lookup('themestore');
 
 		Ext.Array.each(data, function(record) {
 			theme = record.get('Parent');
 			themeinstore = themeStore.findRecord('FormattedID',theme.FormattedID);
 			initiative = themeinstore.get('Parent');
-			that._testResultList.push({
+			that._featureList.push({
 				initiative: initiative,
 				Name: record.get('Name'),
 				State: record.get('State'),
 				FormattedID: record.get('FormattedID'),
+				_ref: record.get('_ref'),
 				Owner: record.get('Owner'),
+				Parent: record.get('Parent'),
 				PercentDoneByStoryPlanEstimate: record.get('PercentDoneByStoryPlanEstimate')
 			});
 		});
 		
 		var summaryStore = Ext.create('Rally.data.custom.Store', {
 			storeId: 'featureStore',
-			data: that._testResultList,
+			data: that._featureList,
 			autoScroll: true,
 			pageSize: 500,
 			columnLines: true,
@@ -160,27 +162,31 @@ Ext.define('CustomApp', {
 				xtype: 'rallygrid',
 				store: summaryStore,
 				columnCfgs: [
-					{ header: 'FormattedID', dataIndex: 'FormattedID', flex: 1},
-					{ header: 'Name', dataIndex: 'Name',    flex: 10 },
 					{
-						header: 'State', dataIndex: 'State', flex: 1,
-						renderer: function(value, meta, record) {
-							if(!value) { return ''; }
-							return value.Name;
-						}
+						text: 'FormattedID',
+						dataIndex: 'FormattedID',
+						flex: 1,
+						xtype: 'templatecolumn',
+						tpl: Ext.create('Rally.ui.renderer.template.FormattedIDTemplate')
+					},
+					{ 
+						text: 'Name', dataIndex: 'Name', flex: 10
+					},
+					{
+						text: 'State', dataIndex: 'State', flex: 1
 						// doSort: function(state) {
 
 						// }
 					},
 					{
-						header: '% done (points)',
+						text: '% done (points)',
 						flex: 2,
 						dataIndex: 'PercentDoneByStoryPlanEstimate',
 						xtype: 'templatecolumn',
 						tpl: Ext.create('Rally.ui.renderer.template.progressbar.PercentDoneByStoryPlanEstimateTemplate')
 					},
 					{
-						header: 'Owner',
+						text: 'Owner',
 						dataIndex: 'Owner', flex: 1,
 						renderer: function(value, meta, record) {
 							return value._refObjectName;
@@ -198,7 +204,7 @@ Ext.define('CustomApp', {
 			}]
 		});
 
-/* 		Ext.create('Ext.window.Window', {
+/*		Ext.create('Ext.window.Window', {
 			width: 800,
 			height: 500,
 			
