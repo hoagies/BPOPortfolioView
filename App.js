@@ -22,15 +22,15 @@ Ext.define('CustomApp', {
 	_onLoad: function(){
 		
 		// Radian
-		var project_oid = '/project/37192747640';
+		// var project_oid = '/project/37192747640';
 		
 		var initiativestore = Ext.create('Rally.data.WsapiDataStore', {
 			model: 'PortfolioItem/Initiative',
-			context: {
-				project: project_oid,
-				projectScopeDown: true,
-				projectScopeUp: false
-			},
+			// context: {
+				// project: project_oid,
+				// projectScopeDown: true,
+				// projectScopeUp: false
+			// },
 			pageSize: 200,
 			limit: 10000,
 			autoLoad: true,
@@ -52,15 +52,15 @@ Ext.define('CustomApp', {
 	_onInitiativesLoaded: function(store_initiatives, data) {
 
 		// Radian
-		var project_oid = '/project/37192747640';
+		// var project_oid = '/project/37192747640';
 	
 		var themeStore = Ext.create('Rally.data.WsapiDataStore', {
 			model: 'PortfolioItem/Theme',
-			context: {
-				project: project_oid,
-				projectScopeDown: true,
-				projectScopeUp: false
-			},
+			// context: {
+				// project: project_oid,
+				// projectScopeDown: true,
+				// projectScopeUp: false
+			// },
 			pageSize: 200,
 			limit: 10000,
 			autoLoad: true,
@@ -80,7 +80,7 @@ Ext.define('CustomApp', {
 	_onThemesLoaded: function(store_themes) {
 		
 		// Radian
-		var project_oid = '/project/37192747640';
+		// var project_oid = '/project/37192747640';
 		
 		var filters = Ext.create('Rally.data.QueryFilter', {
 			property: 'FormattedID',
@@ -99,11 +99,11 @@ Ext.define('CustomApp', {
 
 		var featureStore = Ext.create('Rally.data.WsapiDataStore', {
 			model: 'PortfolioItem/Feature',
-			context: {
-				project: project_oid,
-				projectScopeDown: true,
-				projectScopeUp: false
-			},
+			// context: {
+				// project: project_oid,
+				// projectScopeDown: true,
+				// projectScopeUp: false
+			// },
 			autoLoad: true,
 			storeId: 'featurestore',
 			pageSize: 200,
@@ -237,7 +237,11 @@ Ext.define('CustomApp', {
 	},
 
 	_getOwnerFilter: function() {
-		var comboval = this.down('#ownerComboBox').getValue();
+		combo = this.down('#ownerComboBox');
+		var comboval = combo.getValue();
+		if(!comboval){
+			comboval = combo.stateValue;
+		}
 		if(String(comboval).indexOf('-1') > -1){
 			comboval = null;
 		}
