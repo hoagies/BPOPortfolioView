@@ -193,7 +193,7 @@ Ext.define('CustomApp', {
 					},
 					{
 						text: 'Owner',
-						dataIndex: 'Owner', flex: 1,
+						dataIndex: 'Owner', flex: 2,
 						renderer: function(value, meta, record) {
 							return value._refObjectName;
 						}
