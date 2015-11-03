@@ -182,7 +182,13 @@
 						text: 'Name', dataIndex: 'Name', flex: 10
 					},
 					{
-						text: 'State', dataIndex: 'State', flex: 1
+						text: 'State',
+						dataIndex: 'State',
+						flex: 1,
+						renderer: function(value, meta, record) {
+							if(!value) { return ''; }
+							return value.Name;
+						}
 						// doSort: function(state) {
 
 						// }
